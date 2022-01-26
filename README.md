@@ -13,3 +13,7 @@ https://www.youtube.com/watch?v=jTDnGox0c9Y
 The codes are thougth to be executed on the D-Wave's platform:
 
 https://cloud.dwavesys.com/leap/login/?next=/leap/
+
+To use these examples, create a free account on the D-Wave's platform and enter this URL on your browser:
+
+https://ide.dwavesys.io/#https://github.com/jluishita/d-wave-examples
