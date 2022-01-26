@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
- File name: hamiltonian-cycle-BQM.py
+ File name: hamiltonian-cycle-CQM.py
  
  File type: Python file
  
@@ -20,7 +20,7 @@
      When the graph is complete, the solution is easier than in the general
      case. 
 
-     In this file, the Binary Quadratic Model sampler (BQM) is used.
+     In this file, the Constrained Quadratic Model sampler (CQM) is used.
 
 Disclaimer: This code is an experimental, not-optimized, not-tested code.
      USE IT AT YOUR OWN RISK.
@@ -30,8 +30,8 @@ Disclaimer: This code is an experimental, not-optimized, not-tested code.
 import numpy as np
 import pandas as pd
 
-from dwave.system import DWaveSampler, EmbeddingComposite
-from dimod import BinaryQuadraticModel
+from dwave.system import LeapHybridCQMSampler
+from dimod import ConstrainedQuadraticModel, Binary, quicksum
 
 def main():
 
@@ -39,39 +39,35 @@ def main():
     n_nodes = 5
     # Defines the order in which each node is visited
     n_order = n_nodes
-    # Defines the lagrange multipliers for the constraints
-    lag_mul_1 = 1
-    lag_mul_2 = 1
 
     # Defines the array of binary variables
-    x = [[f'x_c_{node}_p_{order}' for order in range(n_order)] for node in range(n_nodes)]
+    x = [Binary(order + node*n_order) for order in range(n_order) for node in range(n_nodes)]
 
     # Declares the bqm object
-    bqm = BinaryQuadraticModel('BINARY')
+    cqm = ConstrainedQuadraticModel()
 
     # Define the constraint 1: Any node must be visited once and only once
     for node in range(n_nodes):
-        c_weights = [(x[node][order], 1) for order in range(n_order)]
-        bqm.add_linear_equality_constraint(c_weights, constant=-1, lagrange_multiplier=lag_mul_1)
+        cqm.add_constraint(quicksum(x[order + node*n_order] for order in range(n_order)) == 1, label='node_once_'+str(node))
 
     # Define the constraint 2: Any order must be selected once and only once
     for order in range(n_order):
-        c_weights = [(x[node][order], 1) for node in range(n_nodes)]
-        bqm.add_linear_equality_constraint(c_weights, constant=-1, lagrange_multiplier=lag_mul_2)
+        cqm.add_constraint(quicksum(x[order + node*n_order] for node in range(n_nodes)) == 1, label='order_once_'+str(order))
 
     # Declare the sample to be used and solve the problem
-    sampler = EmbeddingComposite(DWaveSampler())
-    sampleset = sampler.sample(bqm, num_reads=100)
+    sampler = LeapHybridCQMSampler()
+    sampleset = sampler.sample_cqm(cqm, time_limit=10)
 
-    # Take best solution
-    first_sample = sampleset.first.sample
+    # Gets rid of the unfeasible solutions and gets the best feasible solution
+    feasible_sols = np.where(sampleset.record.is_feasible==True)
+    solution = sampleset.record[feasible_sols[0][0]][0]
 
-    # Reshapes the best solution
+    # Reshapes the best feasible solution
     data = np.zeros((n_nodes, n_order))
     for order in range(n_order):
         for node in range(n_nodes):
-            data[node, order] = first_sample[x[node][order]]
-
+            data[node, order] = solution[order + node*n_order]
+            
     # Defines column and row names for the final solution
     columns = ['order_'+str(order) for order in range(n_order)]
     index = ['node_'+str(node) for node in range(n_nodes)]
