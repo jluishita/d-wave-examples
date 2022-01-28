@@ -36,10 +36,19 @@ from dimod import BinaryQuadraticModel
 
 def test_unique_color(data, n_regions):
     if np.array_equal(np.ones(n_regions), data.sum(axis=1)):
-        print(' The constraint 1 is fulfilled.')
+        print(' \nThe constraint #1 is fulfilled.\n')
     else:
-        print(' Warning: the constraint 1 is NOT fulfilled')
+        print(' \nWarning: Constraint #1 is NOT fulfilled\.n')
 
+def test_adjacent_regions(list_of_regions, color_to_region, list_of_borders):
+    for region1 in list_of_regions:
+        for region2 in list_of_borders[region1]:
+            r1 = list_of_regions.index(region1)
+            r2 = list_of_regions.index(region2)
+            if color_to_region[r1]==color_to_region[r2]:
+                print(' \nWarning: Constraint #2 is NOT fulfilled.\n')
+                return
+    print(' \nConstraint #2 is fulfilled.\n')
 
 def main():
 
