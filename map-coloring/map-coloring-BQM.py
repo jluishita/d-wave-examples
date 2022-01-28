@@ -35,7 +35,7 @@ from dwave.system import DWaveSampler, EmbeddingComposite
 from dimod import BinaryQuadraticModel
 
 def test_unique_color(data, n_regions):
-    if np.array_equal(np.ones(n_regions), data.values.sum(axis=1)):
+    if np.array_equal(np.ones(n_regions), data.sum(axis=1)):
         print(' The constraint 1 is fulfilled.')
     else:
         print(' Warning: the constraint 1 is NOT fulfilled')
