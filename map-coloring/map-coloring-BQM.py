@@ -121,6 +121,8 @@ def main():
     list_of_colors_np = np.array(list_of_colors)
     color_to_region = list_of_colors_np[np.argmax(data, axis=1)]
 
+    test_adjacent_regions(list_of_regions, color_to_region, list_of_borders)
+
     # Defines column and row names for the final solution
     columns = ['color']
     df_solution = pd.DataFrame(data=color_to_region, columns=columns, index=list_of_regions)
