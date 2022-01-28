@@ -82,7 +82,7 @@ def main():
         bqm.add_linear_equality_constraint(c_weights, constant=-1, lagrange_multiplier=lag_mul_1)
 
     # Define the constraint 2: Any order must be selected once and only once
-    visited = ()
+    visited = set()
     for region1 in list_of_regions:
         for region2 in list_of_borders[region1]:
             if (region1,region2) not in visited and (region2,region1) not in visited:
