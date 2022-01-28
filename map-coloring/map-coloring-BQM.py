@@ -34,11 +34,12 @@ from tabulate import tabulate
 from dwave.system import DWaveSampler, EmbeddingComposite
 from dimod import BinaryQuadraticModel
 
-def print_solution(solution):
-    # Convert the dictionary into an array
-    data = list(solution.items())
-    # Plot the array as a table using tabulate
-    print(tabulate(data))
+def test_unique_color(data, n_regions):
+    if np.array_equal(np.ones(n_regions), data.values.sum(axis=1)):
+        print(' The constraint 1 is fulfilled.')
+    else:
+        print(' Warning: the constraint 1 is NOT fulfilled')
+
 
 def main():
 
@@ -106,10 +107,14 @@ def main():
         for region in range(n_regions):
             data[region, color] = first_sample[x[region][color]]
 
+    test_unique_color(data, n_regions)
+
+    list_of_colors_np = np.array(list_of_colors)
+    color_to_region = list_of_colors_np[np.argmax(data, axis=1)]
+
     # Defines column and row names for the final solution
-    columns = ['order_'+str(color) for color in range(n_colors)]
-    index = ['node_'+str(region) for region in range(n_regions)]
-    df_solution = pd.DataFrame(data=data, columns=columns, index=index)
+    columns = ['color']
+    df_solution = pd.DataFrame(data=color_to_region, columns=columns, index=list_of_regions)
 
     # Prints final solution
     print(df_solution)
