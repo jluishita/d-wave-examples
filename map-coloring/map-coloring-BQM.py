@@ -36,7 +36,7 @@ from dimod import BinaryQuadraticModel
 
 def test_unique_color(data, n_regions):
     if np.array_equal(np.ones(n_regions), data.sum(axis=1)):
-        print(' \nThe constraint #1 is fulfilled.\n')
+        print(' \nConstraint #1 is fulfilled.\n')
     else:
         print(' \nWarning: Constraint #1 is NOT fulfilled\.n')
 
