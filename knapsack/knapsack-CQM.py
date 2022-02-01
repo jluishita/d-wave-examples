@@ -32,26 +32,15 @@ from tabulate import tabulate
 from dwave.system import LeapHybridCQMSampler
 from dimod import ConstrainedQuadraticModel, Binary, Integer, quicksum
 
-def test_unique_color(data, n_regions):
+def test_max_weight(solution, list_of_weights, max_weight):
     """
-    This function checks whether the first constraint is fulfilled
+    This function checks whether the inequality constraint is fulfilled
     """
-    if np.array_equal(np.ones(n_regions), data.sum(axis=1)):
-        print(' \nConstraint #1 is fulfilled.\n')
+    if (np.array(solution)*np.array(list_of_weights)).sum() <= max_weight:
+        print(' \nInequality constraint is fulfilled.\n')
     else:
-        print(' \nWarning: Constraint #1 is NOT fulfilled.\n')
+        print(' \nWarning: Inequality constraint is NOT fulfilled.\n')
 
-def test_adjacent_regions(list_of_regions, color_to_region, list_of_borders):
-    """
-    This function checks whether the second constriant is fulfilled
-    """
-    for r1, region1 in enumerate(list_of_regions):
-        for region2 in list_of_borders[region1]:
-            r2 = list_of_regions.index(region2)
-            if color_to_region[r1]==color_to_region[r2]:
-                print(' \nWarning: Constraint #2 is NOT fulfilled.\n')
-                return
-    print(' \nConstraint #2 is fulfilled.\n')
 
 def main():
 
@@ -92,6 +81,9 @@ def main():
     # Gets rid of the unfeasible solutions and gets the best feasible solution
     feasible_sols = np.where(sampleset.record.is_feasible==True)
     solution = sampleset.record[feasible_sols[0][0]][0]
+
+    # Cheks the inequality constraint
+    test_max_weight(solution, list_of_weights, max_weight)
 
     # Reshapes the final solution
     df_sol = pd.DataFrame({'# of elements':list_of_elements, 'value':list_of_values, 
