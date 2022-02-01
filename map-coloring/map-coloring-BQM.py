@@ -58,15 +58,19 @@ def test_adjacent_regions(list_of_regions, color_to_region, list_of_borders):
 
 def main():
 
-    # Define the number of nodes to visit
+    # Defines the regions
     list_of_regions = ["Nouvelle Aquitaine", "Occitanie", "Auvergne Rhône-Alpes", "Bretagne", "Normandie", 
                        "Pays de la Loire", "Centre-Val de Loire", "Île-de-France", "Hauts-de-France",
                        "Grand-Est", "Bourgogne Franche-Comté", "Provence-Alpes-Côte dAzur"]
-    # Defines the order in which each node is visited
+
+    # Defines the colors
     list_of_colors = ['red', 'blue', 'green', 'yellow']
+
+    # Number of colors and number of regions
     n_regions = len(list_of_regions)
     n_colors = len(list_of_colors)
 
+    # Defines the adjacent regions
     list_of_borders = {"Nouvelle Aquitaine": ["Occitanie", "Auvergne Rhône-Alpes", "Centre-Val de Loire", "Pays de la Loire"],
                        "Occitanie": ["Provence-Alpes-Côte dAzur", "Auvergne Rhône-Alpes", "Nouvelle Aquitaine"],
                        "Provence-Alpes-Côte dAzur": ["Auvergne Rhône-Alpes", "Occitanie"], 
