@@ -38,9 +38,8 @@ def main():
     n_nodes = 5
     # Defines the order in which each node is visited
     n_order = n_nodes
-    # Defines the lagrange multipliers for the constraints
-    lag_mul_1 = 1
-    lag_mul_2 = 1
+    # Defines the lagrange multiplier for the constraints
+    lag_mul = 1
 
     Q = {}
 
