@@ -48,18 +48,18 @@ def main():
     for node1 in range(n_nodes-1):
         for node2 in range(node1+1, n_nodes):
             for order in range(n_order):
-                Q{[(order + node1*n_order, order + node2*n_order)]} = lag_mul
+                Q[(order + node1*n_order, order + node2*n_order)] = lag_mul
 
     # Define the constraint 1: Any node must be visited once and only once
     for node in range(n_nodes):
         for order1 in range(n_order-1):
             for order2 in range(order1+1, n_order):
-                Q{[(order1 + node*n_order, order2 + node*n_order)]} = lag_mul
+                Q[(order1 + node*n_order, order2 + node*n_order)] = lag_mul
 
     # Define the constraint 1: Any node must be visited once and only once
     for node in range(n_nodes):
         for order in range(n_order):
-            Q{[(order + node*n_order, order + node*n_order)]} = -lag_mul
+            Q[(order + node*n_order, order + node*n_order)] = -lag_mul
 
     # Declare the sample to be used and solve the problem
     sampler = EmbeddingComposite(DWaveSampler())
