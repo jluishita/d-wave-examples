@@ -64,7 +64,7 @@ def main():
 
     # Declare the sample to be used and solve the problem
     sampler = EmbeddingComposite(DWaveSampler())
-    sampleset = sampler.sample(Q, num_reads=100)
+    sampleset = sampler.sample_qubo(Q, num_reads=100)
 
     # Take best solution
     first_sample = sampleset.first.sample
