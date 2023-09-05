@@ -70,10 +70,7 @@ def main():
     first_sample = sampleset.first.sample
 
     # Reshapes the best solution
-    data = np.zeros((n_nodes, n_order))
-    for order in range(n_order):
-        for node in range(n_nodes):
-            data[node, order] = first_sample[x[node][order]]
+    data = np.array(list(first_sample.values())).reshape((n_nodes, n_order))
 
     # Defines column and row names for the final solution
     columns = ['order_'+str(order) for order in range(n_order)]
